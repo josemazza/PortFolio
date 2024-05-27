@@ -1,0 +1,154 @@
+-- A traves de este Script Consolido la Información de las Ventas de 11 Empresas que están en 3 Servidores
+SELECT fvi.TIPOEMPRESA,
+        fvi.TIPODOCUMENTO,
+        fvi.SERIE,
+        fvi.NUMERO,
+        fvi.MONTO AS MONTO_US$,
+        fvi.CLIENTE,
+        fvi.CATEGORIA,
+        fvi.DESCRIPCION,
+        fvi.FECHA,
+        'Hcv Ccs' AS EMPRESA
+    FROM PTRHIDROCAVENV3.VPB_VENTAXP_D fvi
+    WHERE trunc (FECHA) >= '01/01/2023'
+        AND fvi.CATEGORIA = 'comerciales'
+UNION ALL
+SELECT fvi.TIPOEMPRESA,
+        fvi.TIPODOCUMENTO,
+        fvi.SERIE,
+        fvi.NUMERO,
+        fvi.MONTO AS MONTO_US$,
+        fvi.CLIENTE,
+        fvi.CATEGORIA,
+        fvi.DESCRIPCION,
+        fvi.FECHA,
+        'Sigma Panamá' AS EMPRESA
+    FROM PTRSIGMAINDPANA.VPB_VENTAXP_D fvi
+    WHERE trunc (FECHA) >= '01/01/2023'
+        AND fvi.CATEGORIA = 'comerciales'
+UNION ALL
+SELECT fvi.TIPOEMPRESA,
+        fvi.TIPODOCUMENTO,
+        fvi.SERIE,
+        fvi.NUMERO,
+        fvi.MONTO AS MONTO_US$,
+        fvi.CLIENTE,
+        fvi.CATEGORIA,
+        fvi.DESCRIPCION,
+        fvi.FECHA,
+        'Sigma Miami' AS EMPRESA
+    FROM PTRSIGMAINDMIA.VPB_VENTAXP_D fvi
+    WHERE trunc (FECHA) >= '01/01/2023'
+        AND fvi.CATEGORIA = 'comerciales'
+UNION ALL
+SELECT fvi.TIPOEMPRESA,
+        fvi.TIPODOCUMENTO,
+        fvi.SERIE,
+        fvi.NUMERO,
+        fvi.MONTO AS MONTO_US$,
+        fvi.CLIENTE,
+        fvi.CATEGORIA,
+        fvi.DESCRIPCION,
+        fvi.FECHA,
+        'Delta Guar' AS EMPRESA
+    FROM PTRDELTAV3.VPB_VENTAXP_D @dbdeltav3 fvi
+    WHERE trunc (FECHA) >= '01/01/2023'
+        AND fvi.CATEGORIA = 'comerciales'
+UNION ALL
+SELECT fvi.TIPOEMPRESA,
+        fvi.TIPODOCUMENTO,
+        fvi.SERIE,
+        fvi.NUMERO,
+        fvi.MONTO AS MONTO_US$,
+        fvi.CLIENTE,
+        fvi.CATEGORIA,
+        fvi.DESCRIPCION,
+        fvi.FECHA,
+        'Mega Inc' AS EMPRESA
+    FROM PTRMEGAINC.VPB_VENTAXP_D @dbdeltav3 fvi
+    WHERE trunc (FECHA) >= '01/01/2023'
+        AND fvi.CATEGORIA = 'comerciales'
+UNION ALL
+SELECT fvi.TIPOEMPRESA,
+        fvi.TIPODOCUMENTO,
+        fvi.SERIE,
+        fvi.NUMERO,
+        fvi.MONTO AS MONTO_US$,
+        fvi.CLIENTE,
+        fvi.CATEGORIA,
+        fvi.DESCRIPCION,
+        fvi.FECHA,
+        'Mega' AS EMPRESA
+    FROM PTRMEGAV3.VPB_VENTAXP_D @dbdeltav3 fvi
+    WHERE trunc (FECHA) >= '01/01/2023'
+        AND fvi.CATEGORIA = 'comerciales'
+UNION ALL
+SELECT fvi.TIPOEMPRESA,
+        fvi.TIPODOCUMENTO,
+        fvi.SERIE,
+        fvi.NUMERO,
+        fvi.MONTO AS MONTO_US$,
+        fvi.CLIENTE,
+        fvi.CATEGORIA,
+        fvi.DESCRIPCION,
+        fvi.FECHA,
+        'Hcv Pzo' AS EMPRESA
+    FROM PTRHIDROPV3.VPB_VENTAXP_D @dbpzo fvi
+    WHERE trunc (FECHA) >= '01/01/2023'
+        AND fvi.CATEGORIA = 'comerciales'
+UNION ALL
+SELECT fvi.TIPOEMPRESA,
+        fvi.TIPODOCUMENTO,
+        fvi.SERIE,
+        fvi.NUMERO,
+        fvi.MONTO AS MONTO_US$,
+        fvi.CLIENTE,
+        fvi.CATEGORIA,
+        fvi.DESCRIPCION,
+        fvi.FECHA,
+        'Mega Pzo' AS EMPRESA
+    FROM PTRMEGAPZOV3.VPB_VENTAXP_D @dbpzo fvi
+    WHERE trunc (FECHA) >= '01/01/2023'
+        AND fvi.CATEGORIA = 'comerciales'
+UNION ALL
+SELECT fvi.TIPOEMPRESA,
+        fvi.TIPODOCUMENTO,
+        fvi.SERIE,
+        fvi.NUMERO,
+        fvi.MONTO AS MONTO_US$,
+        fvi.CLIENTE,
+        fvi.CATEGORIA,
+        fvi.DESCRIPCION,
+        fvi.FECHA,
+        'Delta Mgta' AS EMPRESA
+    FROM PTRDELTAMGTAV3.VPB_VENTAXP_D @DBPMV fvi
+    WHERE trunc (FECHA) >= '01/01/2023'
+        AND fvi.CATEGORIA = 'comerciales'
+UNION ALL
+SELECT fvi.TIPOEMPRESA,
+        fvi.TIPODOCUMENTO,
+        fvi.SERIE,
+        fvi.NUMERO,
+        fvi.MONTO AS MONTO_US$,
+        fvi.CLIENTE,
+        fvi.CATEGORIA,
+        fvi.DESCRIPCION,
+        fvi.FECHA,
+        'Kappa' AS EMPRESA
+    FROM PTRKAPPAV3.VPB_VENTAXP_D @DBPMV fvi
+    WHERE trunc (FECHA) >= '01/01/2023'
+        AND fvi.CATEGORIA = 'comerciales'
+UNION ALL
+SELECT fvi.TIPOEMPRESA,
+        fvi.TIPODOCUMENTO,
+        fvi.SERIE,
+        fvi.NUMERO,
+        fvi.MONTO AS MONTO_US$,
+        fvi.CLIENTE,
+        fvi.CATEGORIA,
+        fvi.DESCRIPCION,
+        fvi.FECHA,
+        'Hcv Mgta' AS EMPRESA
+    FROM PTRHIDROMGTAV3.VPB_VENTAXP_D @DBPMV fvi
+    WHERE trunc (FECHA) >= '01/01/2023'
+        AND fvi.CATEGORIA = 'comerciales'
