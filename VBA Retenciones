@@ -1,0 +1,582 @@
+    
+Sub Reg_Comprobantes()
+'
+' Registro de comprobante de IVA Macro
+' Copia la Planilla Formulada a una no Formulada, deja todo como Valores
+
+
+Application.ScreenUpdating = False
+'Verifica que swiches estas activados
+'On Error Resume Next
+
+    Worksheets("Generador").Select
+    CantFact = Range("B27")
+    CantFactISLR = Range("M27")
+    CantFactMunc = Range("N27")
+    ProcIVA = Range("C9")
+    ProcIVAP = Range("C10")
+    ProcISLRPJ = Range("G9")
+    ProcISLRPN = Range("G10")
+    ProcMunicPlaz = Range("I9")
+    ProcMunicPzo = Range("I10")
+    ProcMunicPlazProv = Range("K9")
+    
+    Sheets("Datos Oficinas").Visible = True
+    
+'Procedimientos para Registro del Comprobante de IVA
+If ProcIVA = True Then
+   Application.CutCopyMode = False
+   
+'Copia y Pega El No. de Comprobante
+    Sheets("IVA (Valores)").Visible = True
+    Sheets("IVA").Range("I12:J12").Copy: Sheets("IVA (Valores)").Range("I12:J12").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+        
+'Copia y Pega El Nombre de la Cia
+    Sheets("IVA").Range("A17:E18").Copy: Sheets("IVA (Valores)").Range("A17:E18").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+    Application.CutCopyMode = False
+        
+'Copia y Pega El RIF
+    Sheets("IVA").Range("H17:K18").Copy
+    Sheets("IVA (Valores)").Range("H17:K18").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+
+'Copia y Pega Fecha de Emision
+    Sheets("IVA").Select
+    Range("L12:M12").Copy
+    Sheets("IVA (Valores)").Range("L12:M12").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+        
+'Copia y Pega Fecha de Entrega
+    Sheets("IVA").Select
+    Range("N12:O12").Copy
+    Sheets("IVA (Valores)").Range("N12:O12").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+        
+'Copia y Pega Fecha de Entrega
+    Sheets("IVA").Select
+    Range("M17:O18").Copy
+    Sheets("IVA (Valores)").Range("M17:O18").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+        
+'Copia y Pega Nombre Proveedor
+    Sheets("IVA").Select
+    Range("A26:E27").Copy
+    Sheets("IVA (Valores)").Range("A26:E27").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+ 
+'Copia y Pega RIF Proveedor
+    Sheets("IVA").Select
+    Range("H26:K27").Copy
+    Sheets("IVA (Valores)").Range("H26:K27").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    
+'Copia y Pega Direccion Proveedor
+    Sheets("IVA").Select
+    Range("A30:K31").Copy
+    Sheets("IVA (Valores)").Range("A30:K31").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    
+'Copia y Pega Datos de la Factura
+    Sheets("IVA").Select
+    Rows("36:45").Select
+    Selection.Copy
+    Range("A1").Select
+    Sheets("IVA (Valores)").Select
+    Rows("36:45").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("A1").Select
+
+'Copia y Pega Logo de la Compañía
+
+CIA = Range("RazSoc")
+
+
+
+  
+'Registrar en la Base de Datos
+    
+d = Day(Now)
+    
+If d <= 15 Then
+    Sheets("IVA (Valores)").Select
+    Rows("1:52").Select
+    Selection.Copy
+    Sheets("BD Comp. IVA I").Select
+    Rows("1:1").Select
+    Selection.Insert Shift:=xlDown
+    Range("A1").Select
+    Sheets("IVA (Valores)").Visible = False
+
+Else
+    Sheets("IVA (Valores)").Select
+    Rows("1:52").Select
+    Selection.Copy
+    Sheets("BD Comp. IVA II").Select
+    Rows("1:1").Select
+    Selection.Insert Shift:=xlDown
+    Range("A1").Select
+    Sheets("IVA (Valores)").Visible = False
+    
+End If
+    
+'Aqui Inicia Guardar datos en TXT la sección de IVA
+
+If ProcIVA = True And CantFact > 0 Then
+    Sheets("Generador").Select
+    Sheets("Pre TXT").Visible = True
+    Sheets("Pre TXT").Select
+    
+'Selecciona depende de la cantidad de Facturas Cargadas
+    Rows(2 & ":" & CantFact + 1).Select
+    Selection.Copy
+    ActiveWindow.SelectedSheets.Visible = False
+    Sheets("TXT RET. IVA").Select
+    
+    Rows("2:2").Select
+    Selection.Insert Shift:=xlDown
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("A1").Select
+    ActiveWorkbook.Save
+End If
+    Sheets("Generador").Select
+    Range("A1").Select
+    ActiveWorkbook.Save
+    
+End If
+
+
+'Registro del Comprobante de ISLR PJ
+
+If ProcISLRPJ = True Then
+    Sheets("ISLR PJ (Valores)").Visible = True
+    Application.CutCopyMode = False
+
+'Copia y Pega El Nombre de la Cia
+    Sheets("ISLR PJ").Range("A9:D10").Copy
+    Sheets("ISLR PJ (Valores)").Range("A9:D10").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+
+        
+'Copia y Pega El RIF
+    Sheets("ISLR PJ").Range("F9:I10").Copy
+    Sheets("ISLR PJ (Valores)").Range("F9:I10").PasteSpecial Paste:=xlPasteValues
+    
+    
+'Estas Lineas copian y Pegan el nombre del Proveedor
+    Sheets("ISLR PJ").Range("A19:D20").Copy
+    Sheets("ISLR PJ (Valores)").Range("A19:D20").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+   
+'Estas Lineas copian y Pegan RIF del Proveedor
+    Sheets("ISLR PJ").Range("F19:I20").Copy
+    Sheets("ISLR PJ (Valores)").Range("F19:I20").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+   
+'Estas Lineas copian y Pegan Dirección Proveedor
+    Sheets("ISLR PJ").Range("A23:K24").Copy
+    Sheets("ISLR PJ (Valores)").Range("A23:K24").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+   
+'Estas Lineas copian y Pegan el tipo de persona
+    Sheets("ISLR PJ").Range("C26:D26").Copy
+    Sheets("ISLR PJ (Valores)").Range("C26:D26").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+  
+    
+'Copian y Pegan Las fechas Desde y Hasta
+    Sheets("ISLR PJ").Range("G26:I26").Copy
+    Sheets("ISLR PJ (Valores)").Range("G26:I26").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+    
+    
+'Copian y Pegan Bloque de información
+    Sheets("ISLR PJ").Range("A33:I42").Copy
+    Sheets("ISLR PJ (Valores)").Range("A33").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+
+
+'Copian y Pegan Toda la Planilla de Retención a la Base de Datos
+    Sheets("ISLR PJ (Valores)").Select
+    Rows("1:49").Copy
+    ActiveWindow.SelectedSheets.Visible = False
+    Sheets("BD Comp ISLR").Select
+    Rows("1:1").Select
+    Selection.Insert Shift:=xlDown
+    Worksheets("Generador").Select
+    Application.CutCopyMode = False
+    Range("A1").Select
+    
+'Aqui Guardar datos en TXT Inicia la sección de ISLR PJ
+If ProcISLRPJ = True Then
+    Sheets("PRE TXT ISLR").Visible = True
+    Sheets("PRE TXT ISLR").Select
+    
+    'Selecciona depende de la cantidad de Facturas Cargadas
+    Rows(5 & ":" & CantFactISLR + 4).Select
+    Selection.Copy
+    Sheets("PRE TXT ISLR").Visible = False
+    Sheets("TXT RET ISLR").Select
+    Rows("5:5").Select
+    Selection.Insert Shift:=xlDown
+    Application.CutCopyMode = False
+    Rows(5 & ":" & CantFact + 4).Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = False
+    ActiveWorkbook.Save
+    Range("A1").Select
+    Sheets("Generador").Select
+    
+  End If
+    
+    
+End If
+
+
+'Registro del Comprobante de ISLR PN
+
+If ProcISLRPN = True Then
+Sheets("ISLR PN (Valores)").Visible = True
+
+'Copia y Pega El Nombre de la Cia
+    Sheets("ISLR PN").Range("A9:D10").Copy
+    Sheets("ISLR PN (Valores)").Range("A9:D10").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+
+        
+'Copia y Pega El RIF
+    Sheets("ISLR PN").Range("H9:K10").Copy
+    Sheets("ISLR PN (Valores)").Range("H9:K10").PasteSpecial Paste:=xlPasteValues
+    
+    
+'Estas Lineas copian y Pegan el nombre del Proveedor
+    Sheets("ISLR PN").Range("A19:D20").Copy
+    Sheets("ISLR PN (Valores)").Range("A19:D20").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+   
+   
+'Estas Lineas copian y Pegan RIF del Proveedor
+    Sheets("ISLR PN").Range("H19:K20").Copy
+    Sheets("ISLR PN (Valores)").Range("H19:K20").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+
+'Estas Lineas copian y Pegan Dirección Proveedor
+    Sheets("ISLR PN").Range("A23:K24").Copy
+    Sheets("ISLR PN (Valores)").Range("A23:K24").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+
+   
+'Estas Lineas copian y Pegan el tipo de persona
+    Sheets("ISLR PN").Range("C26:D26").Copy
+    Sheets("ISLR PN (Valores)").Range("C26:D26").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+  
+    
+'Copian y Pegan Las fechas Desde y Hasta
+    Sheets("ISLR PN").Range("I26:K26").Copy
+    Sheets("ISLR PN (Valores)").Range("I26:K26").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+    
+    
+'Copian y Pegan Bloque de información
+    Sheets("ISLR PN").Range("A33:K42").Copy
+    Sheets("ISLR PN (Valores)").Range("A33").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+
+
+'Copian y Pegan Toda la Planilla de Retención a la Base de Datos
+    Sheets("ISLR PN (Valores)").Select
+    Rows("1:49").Copy
+    ActiveWindow.SelectedSheets.Visible = False
+    Sheets("BD Comp ISLR PN").Select
+    Rows("1:1").Select
+    Selection.Insert Shift:=xlDown
+    Application.CutCopyMode = False
+    'Sheets("ISLR PN (Valores)").Visible = False
+    Sheets("Generador").Select
+    Range("A1").Select
+    
+'Aqui Guardar datos en TXT Inicia la sección de ISLR PN
+
+If ProcISLRPN = True Then
+    Sheets("PRE TXT ISLR").Visible = True
+    Sheets("PRE TXT ISLR").Select
+
+'Selecciona depende de la cantidad de Facturas Cargadas
+    Rows(5 & ":" & CantFactISLR + 4).Select
+    Selection.Copy
+    Sheets("PRE TXT ISLR").Visible = False
+    Sheets("TXT RET ISLR").Select
+    Rows("5:5").Select
+    Selection.Insert Shift:=xlDown
+    Application.CutCopyMode = False
+    Rows(5 & ":" & CantFact + 4).Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = False
+    
+    
+    Range("A1").Select
+    Sheets("Generador").Select
+    
+End If
+    
+End If
+
+
+
+'Registro del Comprobante de  Municipal Gua
+
+If ProcMunicPlaz = True Then
+
+Sheets("MUNICIPAL").Select
+    Range("C16").Select
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Visible = True
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("C16").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Sheets("MUNICIPAL").Select
+    Range("K16:L16").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("K16:L16").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Sheets("MUNICIPAL").Select
+    Range("A21:D22").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("A21:D22").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Sheets("MUNICIPAL").Select
+    Range("F21:H22").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("F21:H22").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Sheets("MUNICIPAL").Select
+    Range("K21:L22").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("K21:L22").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("A25:H26").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL").Select
+    Range("A25:H26").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("A25:H26").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Sheets("MUNICIPAL").Select
+    Range("K25:L26").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("K25:L26").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Sheets("MUNICIPAL").Select
+    Range("A31:D32").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("A31:D32").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Sheets("MUNICIPAL").Select
+    Range("F31:H32").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("F31:H32").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Sheets("MUNICIPAL").Select
+    Range("K31:L32").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("K31:L32").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("A35:H36").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL").Select
+    Range("A35:H36").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("A35:H36").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Sheets("MUNICIPAL").Select
+    Range("K35:L36").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("K35:L36").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Sheets("MUNICIPAL").Select
+    Range("A41:L51").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("MUNICIPAL (Valores)").Select
+    Range("A41:L51").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+
+'Copian y Pegan Toda la Planilla de Retención a la Base de Datos
+    Rows("1:58").Copy
+    ActiveWindow.SelectedSheets.Visible = False
+    Sheets("BD Municipal Gua").Select
+    Rows("1:1").Select
+    Selection.Insert Shift:=xlDown
+    Application.CutCopyMode = False
+'    Sheets("ISLR PN (Valores)").Visible = False
+    Sheets("Generador").Select
+    Range("A1").Select
+    
+'Aqui Guardar datos en TXT Inicia la sección de Municipal
+
+If ProcMunicPlaz = True Then
+    Sheets("PRE TXT MUNIC GUA").Visible = True
+    Sheets("PRE TXT MUNIC GUA").Select
+
+'Selecciona depende de la cantidad de Facturas Cargadas
+    Rows(2 & ":" & CantFactMunc + 1).Select
+    Selection.Copy
+    Sheets("PRE TXT MUNIC GUA").Visible = False
+    Sheets("TXT MUNIC GUA").Select
+    Rows("2:2").Select
+    Selection.Insert Shift:=xlDown
+    Application.CutCopyMode = False
+    Rows(2 & ":" & CantFactMunc + 1).Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = False
+    
+    
+    Range("A1").Select
+    Sheets("Generador").Select
+    
+End If
+    
+End If
+
+'Registro del Comprobante de  Municipal Pzo
+
+If ProcMunicPzo = True Then
+
+    Sheets("Municipal Pzo").Select
+    
+'Copia y Pega Numero de comprobante
+    Sheets("Municipal Pzo").Range("Q7:T7").Copy
+    Sheets("Municipal Pzo (Valores)").Range("Q7:T7").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+    
+'Copia y Pega El Nombre de la Cia
+    Sheets("Municipal Pzo").Range("B11:H11").Copy
+    Sheets("Municipal Pzo (Valores)").Range("B11:H11").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+
+        
+'Copia y Pega Licencia de Actividad
+    Sheets("Municipal Pzo").Range("J11:L11").Copy
+    Sheets("Municipal Pzo (Valores)").Range("J11:L11").PasteSpecial Paste:=xlPasteValues
+    
+    
+'Copia y Pega El RIF
+    Sheets("Municipal Pzo").Range("O11:Q11").Copy
+    Sheets("Municipal Pzo (Valores)").Range("F9:I10").PasteSpecial Paste:=xlPasteValues
+    
+ 'Copia y Pega Fecha Comprobante
+    Sheets("Municipal Pzo").Range("S11:T11").Copy
+    Sheets("Municipal Pzo (Valores)").Range("S11:T11").PasteSpecial Paste:=xlPasteValues
+    
+    
+ 'Copia y Pega Direccion Fiscal
+    Sheets("Municipal Pzo").Range("B14:J14").Copy
+    Sheets("Municipal Pzo (Valores)").Range("B14:J14").PasteSpecial Paste:=xlPasteValues
+      
+'Estas Lineas copian y Pegan el nombre del Proveedor
+    Sheets("Municipal Pzo").Range("B17:H17").Copy
+    Sheets("Municipal Pzo (Valores)").Range("B17:H17").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+    
+'Estas Lineas copian y Pegan Licencia
+    Sheets("Municipal Pzo").Range("J17:K17").Copy
+    Sheets("Municipal Pzo (Valores)").Range("J17:K17").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+    
+'Estas Lineas copian y Pegan RUC
+    Sheets("Municipal Pzo").Range("L17:M17").Copy
+    Sheets("Municipal Pzo (Valores)").Range("L17:M17").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+    
+'Estas Lineas copian y Pegan RIF del Proveedor
+    Sheets("Municipal Pzo").Range("N17:P17").Copy
+    Sheets("Municipal Pzo (Valores)").Range("N17:P17").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+   
+'Estas Lineas copian y Pegan Periodo Fiscal 1
+    Sheets("Municipal Pzo").Range("Q17:R17").Copy
+    Sheets("Municipal Pzo (Valores)").Range("Q17:R17").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+
+'Estas Lineas copian y Pegan Periodo Fiscal 2
+    Sheets("Municipal Pzo").Range("S17:T17").Copy
+    Sheets("Municipal Pzo (Valores)").Range("S17:T17").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+     
+'Estas Lineas copian y Pegan Dirección Proveedor
+    Sheets("Municipal Pzo").Range("B20:K20").Copy
+    Sheets("Municipal Pzo (Valores)").Range("B20:K20").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+   
+   
+'Copian y Pegan Bloque de información
+    Sheets("Municipal Pzo").Range("B23:T32").Copy
+    Sheets("Municipal Pzo (Valores)").Range("B23").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+
+
+   
+
+'Copian y Pegan Toda la Planilla de Retención a la Base de Datos
+    Rows("1:46").Copy
+    'ActiveWindow.SelectedSheets.Visible = False
+    Sheets("BD Municipal Pzo").Select
+    Rows("1:1").Select
+    Selection.Insert Shift:=xlDown
+    Application.CutCopyMode = False
+'    Sheets("ISLR PN (Valores)").Visible = False
+
+'Aqui Guardar datos en TXT Inicia la sección de Municipal Pzo
+
+If ProcMunicPzo = True Then
+    Sheets("PRE TXT MUNIC PZO").Visible = True
+    Sheets("PRE TXT MUNIC PZO").Select
+
+'Selecciona depende de la cantidad de Facturas Cargadas
+    Rows(2 & ":" & CantFact + 1).Select
+    Selection.Copy
+    Sheets("PRE TXT MUNIC PZO").Visible = False
+    Sheets("TXT MUNIC PZO").Visible = True
+    Sheets("TXT MUNIC PZO").Select
+    Rows("2:2").Select
+    Selection.Insert Shift:=xlDown
+    Application.CutCopyMode = False
+    Rows(2 & ":" & CantFact + 1).Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = False
+    
+    
+    Range("A1").Select
+    Sheets("Generador").Select
+    
+End If
+
+End If
+
+Sheets("Datos Oficinas").Visible = False
+Application.ScreenUpdating = True
+MsgBox "Se completo el Proceso de carga a la base de Datos"
+
+End Sub
